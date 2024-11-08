@@ -12,12 +12,14 @@ if not dbExists:
 
 #cursor.execute("insert into links (link, downloaded) values ('124', 'false');")
 
-def run(playwright: playwright):
+def run(playwright: playwright, test):
     start_url = "https://www.theregister.com/offbeat/bofh/"
     chrome = playwright.chromium
     browser = chrome.launch(headless=False)
     page = browser.new_page()
     page.goto(start_url)
+
+    print(test)
 
     for link in page.locator("a[class=story_link]").all():
         url = link.get_attribute("href")
@@ -37,4 +39,4 @@ def run(playwright: playwright):
     sqliteConnection.close()
 
 with sync_playwright() as playwright:
-    run(playwright)
+    run(playwright, "testing 1, 2, 3")
