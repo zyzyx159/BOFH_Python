@@ -17,6 +17,8 @@ def run(playwright: playwright):
     page = browser.new_page()
     page.goto(start_url)
 
+    print(test)
+
     for link in page.locator("a[class=story_link]").all():
         url = link.get_attribute("href")
         #print(url)
@@ -35,4 +37,4 @@ def run(playwright: playwright):
     sqliteConnection.close()
 
 with sync_playwright() as playwright:
-    run(playwright)
+    run(playwright, "testing 1, 2, 3")
