@@ -10,8 +10,6 @@ cursor = sqliteConnection.cursor()
 if not dbExists:
     cursor.execute('create table links(link varchar(255), downloaded varchar(5));')
 
-#cursor.execute("insert into links (link, downloaded) values ('124', 'false');")
-
 def run(playwright: playwright):
     start_url = "https://www.theregister.com/offbeat/bofh/"
     chrome = playwright.chromium
