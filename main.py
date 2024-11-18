@@ -10,8 +10,8 @@ cursor = sqliteConnection.cursor()
 if not dbExists:
     cursor.execute('create table links(link varchar(255), downloaded varchar(5));')
 
-def run(playwright: playwright):
-    start_url = "https://www.theregister.com/offbeat/bofh/"
+def run(playwright: playwright, urlArg):
+    start_url = urlArg
     chrome = playwright.chromium
     browser = chrome.launch(headless=False)
     page = browser.new_page()
@@ -35,4 +35,4 @@ def run(playwright: playwright):
     sqliteConnection.close()
 
 with sync_playwright() as playwright:
-    run(playwright)
+    run(playwright, "https://www.theregister.com/offbeat/bofh/")
