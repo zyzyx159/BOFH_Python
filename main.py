@@ -1,38 +1,56 @@
 from playwright.sync_api import sync_playwright, playwright
 import sqlite3
-import os
 
-dbExists = os.path.exists('bofh.db')
+dbName = "bofh.db"
+urlBase = 'https://www.theregister.com'
 
-sqliteConnection = sqlite3.connect('bofh.db')
+sqliteConnection = sqlite3.connect(dbName)
 cursor = sqliteConnection.cursor()
 
-if not dbExists:
-    cursor.execute('create table links(link varchar(255), downloaded varchar(5));')
+createQuery = '''create table if not exists bofh(link text primary key,
+    downloaded text, title text,
+    subtitle text,
+    author text,
+    pubDate text,
+    story text);'''
+countQuery = "select count(*) from bofh where link = ?"
+insertQuery = "insert into bofh (link, downloaded) values (?, 'false');"
 
-def run(playwright: playwright, urlArg):
-    start_url = urlArg
+cursor.execute(createQuery)
+
+def run(playwright: playwright, startURL):
     chrome = playwright.chromium
     browser = chrome.launch(headless=False)
     page = browser.new_page()
-    page.goto(start_url)
+    page.goto(startURL)
 
+    bofhLink = 0
+    newLink = 0
+        
     for link in page.locator("a[class=story_link]").all():
         url = link.get_attribute("href")
-        #print(url)
-        countQuery = "select count(*) from links where link = ?"
-        insertQuery = "insert into links (link, downloaded) values (?, 'false');"
-        urlBase = 'www.theregister.com'
         if "bofh" in url:
-            cursor.execute(countQuery, (url,))
+            bofhLink += 1
+            cursor.execute(countQuery, (urlBase + url,))
             count = cursor.fetchall()
-            #Fetch all returns a tuple in a tuple and this is the only way I can convert to an int
-            i = count[0]
-            k = i[0]
-            if k == 0:
+            if count[0][0] == 0:
+                newLink += 1
                 cursor.execute(insertQuery, (urlBase + url,))
-                sqliteConnection.commit()
-    sqliteConnection.close()
+    sqliteConnection.commit()
+    if bofhLink > newLink:
+        nextPage = False
+    elif bofhLink == 0:
+        nextPage = False
+    else:
+        nextPage = True
+    return nextPage
 
 with sync_playwright() as playwright:
-    run(playwright, "https://www.theregister.com/offbeat/bofh/")
+    current = run(playwright, startURL="https://www.theregister.com/offbeat/bofh/")
+    earlier = 1
+    if current == True:
+        archive = True
+        while archive == True:
+            archive = run(playwright, startURL="https://www.theregister.com/offbeat/bofh/earlier/" + str(earlier) + "/")
+            earlier += 1
+    sqliteConnection.close()
