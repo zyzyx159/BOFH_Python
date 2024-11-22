@@ -10,14 +10,12 @@ cursor = sqliteConnection.cursor()
 if not dbExists:
     cursor.execute('create table links(link varchar(255), downloaded varchar(5));')
 
-def run(playwright: playwright):
+def run(PW2: playwright):
     start_url = "https://www.theregister.com/offbeat/bofh/"
-    chrome = playwright.chromium
+    chrome = PW2.chromium
     browser = chrome.launch(headless=False)
     page = browser.new_page()
     page.goto(start_url)
-
-    print(test)
 
     for link in page.locator("a[class=story_link]").all():
         url = link.get_attribute("href")
@@ -37,4 +35,4 @@ def run(playwright: playwright):
     sqliteConnection.close()
 
 with sync_playwright() as playwright:
-    run(playwright, "testing 1, 2, 3")
+    run(playwright)
