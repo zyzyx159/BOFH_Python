@@ -1,5 +1,4 @@
 from playwright.sync_api import sync_playwright, playwright
-import sqlite3
 import database
 
 urlBase = 'https://www.theregister.com'
