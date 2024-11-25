@@ -3,8 +3,8 @@ class episode:
         self.url = URL
         self.downloaded = "True"
 
-    def setTitle(self, title2):
-        self.title = title2
+    def setTitle(self, title):
+        self.title = title
 
     def setSubtitle(self, subtitle):
         self.subtitle = subtitle
