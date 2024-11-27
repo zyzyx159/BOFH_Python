@@ -41,11 +41,11 @@ class episode:
     def getPubDate(self, format, TZ):
         forShort = ("%Y-%m-%d") #2024-11-22
         forLong = ("%A, %B %d %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
-        if format is 'short':
+        if format == 'short':
             return self.pubDate.strftime(forShort)
-        elif format is 'long' and TZ is None:
+        elif format == 'long' and TZ == None:
             return self.pubDate.strftime(forLong)
-        elif format is 'long' and TZ is not None:
+        elif format == 'long' and TZ != None:
             return self.pubDate.astimezone(pytz.timezone(TZ)).strftime(forLong)
 
     def getStory(self):
