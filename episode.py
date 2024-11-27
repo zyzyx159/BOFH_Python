@@ -6,6 +6,9 @@ class episode:
         self.url = URL
         self.downloaded = "True"
 
+    def setEpisodeNum(self, episodeNum):
+        self.episodeNum = episodeNum
+
     def setTitle(self, title):
         self.title = title
 
@@ -28,6 +31,9 @@ class episode:
 
     def getDownloaded(self):
         return "True"
+
+    def getEpisodeNum(self):
+        return self.episodeNum
 
     def getTitle(self):
         return self.title
