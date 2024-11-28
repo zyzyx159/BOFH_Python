@@ -23,6 +23,7 @@ class database:
             set downloaded = ?,
             episodeNum = ?,
             title = ?,
+            subtitle = ?,
             author = ?,
             pubDate = ?,
             story = ?
@@ -45,8 +46,9 @@ class database:
         return downloadList
 
     def update(self, episode):
-        self.cursor.execute(self.updateQuery, (episode.getDownloaded(), episode.getEpisodeNum(),
-            episode.getTitle(), episode.getAuthor(), episode.getPubDate('long', None), 
+        self.cursor.execute(self.updateQuery, (episode.getDownloaded(), 
+            episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(), 
+            episode.getAuthor(), episode.getPubDate('long', None), 
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
 
