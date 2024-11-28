@@ -58,6 +58,7 @@ class episode:
         return self.story
 
     def printShort(self):
+        print(self.episodeNum)
         print("Title = " + self.title)
         print("Subtitle = " + self.subtitle)
         print("Author = " + self.author)
