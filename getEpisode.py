@@ -30,7 +30,6 @@ def run(playwright: playwright, URL):
 
     pageBody = page.query_selector("#body")
     episodeNum = pageBody.query_selector_all('span.label');
-    print(episodeNum[0].inner_text())
     epi.setEpisodeNum(episodeNum[0].inner_text())
 
     story = pageBody.query_selector_all("p:not(:has(span))")
@@ -41,12 +40,8 @@ def run(playwright: playwright, URL):
 
     return epi
 
-    #epi.printShort()
-    # epi.printStory()
-
 #make a PlayWright instance for each
 with sync_playwright() as playwright:
     for link in bofhDB.download():
         play = run(playwright, link[0])
-        #print(play.getDownloaded())
         bofhDB.update(play)
