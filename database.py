@@ -9,6 +9,7 @@ class database:
 
         self.createQuery = '''create table if not exists bofh(link text primary key,
             downloaded text, 
+            episodeNum text,
             title text,
             subtitle text,
             author text,
@@ -16,9 +17,11 @@ class database:
             story text);'''
         self.countQuery = "select count(*) from bofh where link = ?"
         self.insertQuery = "insert into bofh (link, downloaded) values (?, 'False');"
-        self.downloadQuery = "select link from bofh where downloaded = 'False' limit 1;"
+        self.downloadQuery = "select link from bofh where downloaded = 'False' limit 1;" 
+            #for testing this is limited to just the top one.
         self.updateQuery = '''update bofh
             set downloaded = ?,
+            episodeNum = ?,
             title = ?,
             author = ?,
             pubDate = ?,
@@ -42,8 +45,8 @@ class database:
         return downloadList
 
     def update(self, episode):
-        self.cursor.execute(self.updateQuery, (episode.getDownloaded(),
-            episode.getTitle(), episode.getAuthor(), episode.getPubDate(), 
+        self.cursor.execute(self.updateQuery, (episode.getDownloaded(), episode.getEpisodeNum(),
+            episode.getTitle(), episode.getAuthor(), episode.getPubDate('long', None), 
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
 

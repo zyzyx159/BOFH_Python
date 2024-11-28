@@ -1,15 +1,25 @@
 from datetime import datetime
-import calendar
-import time
+import pytz
 
 #website string
 dateString = "Fri 22 Nov 2024 // 09:25 UTC"
 
-#human format
-dt_object = datetime.strptime(dateString, "%a %d %b %Y // %H:%M %Z")
+importFormat = ("%a %d %b %Y // %H:%M %Z")
+dt = datetime.strptime(dateString, importFormat)
+dtWithTZ = dt.replace(tzinfo=pytz.utc)
 
-#date time
-timeStamp = calendar.timegm(dt_object.utctimetuple())
+outputDate = ("%Y-%m-%d")
+    #2024-11-22
+outputDateTime = ("%A, %B %d %Y at %H:%M %Z")
+    #Friday, November 22 2024 at 09:25 UTC
+adjustTimeZone = dtWithTZ.astimezone(pytz.timezone('US/Central'))
+    #Friday, November 22 2024 at 03:25 CST
 
-#just date
-formattedTime = time.strftime('%Y-%m-%d', time.gmtime(timeStamp))
+reAdjTime = dtWithTZ.astimezone(pytz.timezone('US/Central')).strftime("%A, %B %d %Y at %H:%M %Z")
+
+# print(dtWithTZ.strftime(outputDate))
+# print(dtWithTZ.strftime(outputDateTime))
+# print(adjustTimeZone.strftime(outputDateTime))
+# print(dtWithTZ)
+# print(dtWithTZ.strftime("%Z"))
+print(reAdjTime)
