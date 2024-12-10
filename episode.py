@@ -1,5 +1,6 @@
 from datetime import datetime
 import pytz
+import database
 
 class episode:
     def __init__(self, URL):
@@ -21,10 +22,22 @@ class episode:
     def setPubDate(self, pubDate): #demo pubDate: "Fri 22 Nov 2024 // 09:25 UTC"
         importFormat = ("%a %d %b %Y // %H:%M %Z")
         dt = datetime.strptime(pubDate, importFormat)
-        self.pubDate = dt.replace(tzinfo=pytz.utc)
+        self.pubDate = dt
+        #self.pubDate = dt.astimezone(pytz.timezone('UTC'))
         
     def setStory(self, story):
         self.story = story
+
+    def DBInit(self):
+        bofhDB = database.database()
+        row = bofhDB.episodeFromDB(self.getURL())
+        self.episodeNum = row[0]
+        self.title = row[1]
+        self.subtitle = row[2]
+        self.author = row[3]
+        self.pubDate = row[4]
+        self.story = row[5]
+        bofhDB.close
 
     def getURL(self):
         return self.url
@@ -44,15 +57,18 @@ class episode:
     def getAuthor(self):
         return self.author
 
-    def getPubDate(self, format, TZ):
+    def getPubDate(self):
+        return self.pubDate
+
+    def formatPubDate(self, format):
+        dbFormat = ("%Y-%m-%d %H:%M:%S")
+        strDate = datetime.strptime(self.pubDate, dbFormat)
         forShort = ("%Y-%m-%d") #2024-11-22
-        forLong = ("%A, %B %d %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
+        forLong = ("%A, %B %d, %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
         if format == 'short':
-            return self.pubDate.strftime(forShort)
-        elif format == 'long' and TZ == None:
-            return self.pubDate.strftime(forLong)
-        elif format == 'long' and TZ != None:
-            return self.pubDate.astimezone(pytz.timezone(TZ)).strftime(forLong)
+            return strDate.strftime(forShort)
+        elif format == 'long':
+            return strDate.strftime(forLong) + 'UTC'
 
     def getStory(self):
         return self.story
@@ -62,9 +78,8 @@ class episode:
         print("Title = " + self.title)
         print("Subtitle = " + self.subtitle)
         print("Author = " + self.author)
-        print("Published on (short) = "+ self.pubDate, 'short')
-        print("Published on (long) = " + self.pubDate, 'long')
-        print("Published on (long, central) = " + self.pubDate, 'long', 'US/Central')
+        print("Published on (short) = "+ self.formatPubDate('short'))
+        print("Published on (long) = " + self.formatPubDate('long'))
 
     def printStory(self):
         print("Story = " + self.story)
