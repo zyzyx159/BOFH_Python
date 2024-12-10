@@ -32,10 +32,11 @@ def run(playwright: playwright, URL):
     episodeNum = pageBody.query_selector_all('span.label');
     epi.setEpisodeNum(episodeNum[0].inner_text())
 
-    story = pageBody.query_selector_all("p:not(:has(span))")
+    story = pageBody.query_selector_all("p")
     epiStory = "<br />"
     for p in story:
         epiStory = epiStory + "<p>" + p.inner_text() + "</p>"
+    epiStory = epiStory.replace(episodeNum[0].inner_text(), "")
     epi.setStory(epiStory)
 
     return epi
