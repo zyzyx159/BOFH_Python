@@ -28,6 +28,14 @@ class database:
             pubDate = ?,
             story = ?
             where link = ?;'''
+        self.episodeFromDBQuery = '''select episodeNum,
+            title,
+            subtitle,
+            author,
+            pubDate,
+            story
+            from bofh
+            where link = ?;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -48,9 +56,14 @@ class database:
     def update(self, episode):
         self.cursor.execute(self.updateQuery, (episode.getDownloaded(), 
             episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(), 
-            episode.getAuthor(), episode.getPubDate('long', None), 
+            episode.getAuthor(), episode.getPubDate(), 
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
+
+    def episodeFromDB(self, URL):
+        self.cursor.execute(self.episodeFromDBQuery, (URL,))
+        episodeFromDB = self.cursor.fetchone()
+        return episodeFromDB
 
     def close(self):
         self.sqliteConnection.close()
