@@ -11,12 +11,12 @@ class episode:
     def DBInit(self):
         bofhDB = database.database()
         row = bofhDB.episodeFromDB(self.getURL())
-        self.episodeNum = row[0]
-        self.title = row[1]
-        self.subtitle = row[2]
-        self.author = row[3]
-        self.pubDate = row[4]
-        self.story = row[5]
+        self.episodeNum = row[0][0]
+        self.title = row[0][1]
+        self.subtitle = row[0][2]
+        self.author = row[0][3]
+        self.pubDate = row[0][4]
+        self.story = row[0][5]
         bofhDB.close
 #endregion
 
@@ -75,9 +75,12 @@ class episode:
     def formatPubDate(self, format):
         dbFormat = ("%Y-%m-%d %H:%M:%S")
         strDate = datetime.strptime(self.pubDate, dbFormat)
+        forYear = ("%Y") #2024
         forShort = ("%Y-%m-%d") #2024-11-22
         forLong = ("%A, %B %d, %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
-        if format == 'short':
+        if format == 'year':
+            return strDate.strftime(forYear)
+        elif format == 'short':
             return strDate.strftime(forShort)
         elif format == 'long':
             return strDate.strftime(forLong) + 'UTC'
