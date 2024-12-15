@@ -1,4 +1,5 @@
 import episode
 
-fileName = 'test'
-file = open()
+class export:
+    def __init__(self, epi: episode):
+        epi.printShort()
