@@ -69,7 +69,7 @@ class database:
 
     def episodeFromDB(self, URL):
         self.cursor.execute(self.episodeFromDBQuery, (URL,))
-        episodeFromDB = self.cursor.fetchone()
+        episodeFromDB = self.cursor.fetchall()
         return episodeFromDB
 
     def close(self):
