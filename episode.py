@@ -63,9 +63,12 @@ class episode:
     def formatPubDate(self, format):
         dbFormat = ("%Y-%m-%d %H:%M:%S")
         strDate = datetime.strptime(self.pubDate, dbFormat)
+        forYear = ("%Y")
         forShort = ("%Y-%m-%d") #2024-11-22
         forLong = ("%A, %B %d, %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
-        if format == 'short':
+        if format == 'year':
+            return strDate.strftime(forYear)
+        elif format == 'short':
             return strDate.strftime(forShort)
         elif format == 'long':
             return strDate.strftime(forLong) + 'UTC'
