@@ -43,6 +43,8 @@ class database:
             story
             FROM bofh
             WHERE link = ?;'''
+        self.getLinksQuery = '''SELECT link
+            FROM bofh;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -71,6 +73,11 @@ class database:
         self.cursor.execute(self.episodeFromDBQuery, (URL,))
         episodeFromDB = self.cursor.fetchall()
         return episodeFromDB
+
+    def getLinks(self):
+        self.cursor.execute(self.getLinksQuery)
+        links = self.cursor.fetchall()
+        return links
 
     def close(self):
         self.sqliteConnection.close()
