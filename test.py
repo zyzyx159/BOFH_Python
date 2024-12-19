@@ -6,3 +6,4 @@ epi = episode.episode("https://www.theregister.com/2024/11/22/bofh_2024_episode_
 epi.DBInit()
 
 out = export.export(epi)
+out.writeFile()
