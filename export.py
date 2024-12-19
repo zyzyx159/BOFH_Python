@@ -4,7 +4,6 @@ import os
 class export:
     def __init__(self, epi: episode):
         self.epi = epi
-        self.writeFile()
     
     def getPath(self):
         path = os.path.join(os.path.dirname(__file__), "output", self.epi.formatPubDate('year'))
@@ -25,7 +24,7 @@ class export:
             <h1>''' + self.epi.getTitle() + ''' </h1> 
             <h2>''' + self.epi.getSubtitle() + ''' </h2>
             <h3>''' + self.epi.getEpisodeNum() + ''' </h3>
-            <br> horned phone logo here </br>''' + self.epi.getStory() + '''
+            ''' + self.epi.getStory() + '''
             Written by: ''' + self.epi.getAuthor() + '''
             <br> Posted to: <a href="''' + self.epi.getURL() + '''"> ''' + self.epi.getURL() + '''</a> </br>
             Posted on: ''' + self.epi.formatPubDate('long') + '''
