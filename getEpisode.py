@@ -49,5 +49,3 @@ with sync_playwright() as playwright:
     for link in bofhDB.download():
         play = run(playwright, link[0])
         bofhDB.update(play)
-        exp = export.export(play)
-        exp.writeFile()
