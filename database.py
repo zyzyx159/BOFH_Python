@@ -7,35 +7,42 @@ class database:
         self.sqliteConnection = sqlite3.connect(self.dbName)
         self.cursor = self.sqliteConnection.cursor()
 
-        self.createQuery = '''create table if not exists bofh(link text primary key,
-            downloaded text, 
-            episodeNum text,
-            title text,
-            subtitle text,
-            author text,
-            pubDate text,
-            story text);'''
-        self.countQuery = "select count(*) from bofh where link = ?"
-        self.insertQuery = "insert into bofh (link, downloaded) values (?, 'False');"
-        self.downloadQuery = "select link from bofh where downloaded = 'False' limit 1;" 
+        self.createQuery = '''CREATE table if not exists bofh(
+            link TEXT primary key,
+            downloaded TEXT, 
+            episodeNum TEXT,
+            title TEXT,
+            subtitle TEXT,
+            author TEXT,
+            pubDate TEXT,
+            story TEXT);'''
+        self.countQuery = '''SELECT count(*) 
+            FROM bofh 
+            WHERE link = ?'''
+        self.insertQuery = '''INSERT into bofh(
+            link, downloaded) 
+            VALUES (?, "False");'''
+        self.downloadQuery = '''SELECT link 
+            FROM bofh 
+            WHERE downloaded = 'False' limit 1;'''
             #for testing this is limited to just the top one.
-        self.updateQuery = '''update bofh
-            set downloaded = ?,
+        self.updateQuery = '''UPDATE bofh
+            SET downloaded = ?,
             episodeNum = ?,
             title = ?,
             subtitle = ?,
             author = ?,
             pubDate = ?,
             story = ?
-            where link = ?;'''
-        self.episodeFromDBQuery = '''select episodeNum,
+            WHERE link = ?;'''
+        self.episodeFromDBQuery = '''SELECT episodeNum,
             title,
             subtitle,
             author,
             pubDate,
             story
-            from bofh
-            where link = ?;'''
+            FROM bofh
+            WHERE link = ?;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -62,7 +69,7 @@ class database:
 
     def episodeFromDB(self, URL):
         self.cursor.execute(self.episodeFromDBQuery, (URL,))
-        episodeFromDB = self.cursor.fetchone()
+        episodeFromDB = self.cursor.fetchall()
         return episodeFromDB
 
     def close(self):

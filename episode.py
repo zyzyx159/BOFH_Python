@@ -3,10 +3,24 @@ import pytz
 import database
 
 class episode:
+#region init
     def __init__(self, URL):
         self.url = URL
         self.downloaded = "True"
 
+    def DBInit(self):
+        bofhDB = database.database()
+        row = bofhDB.episodeFromDB(self.getURL())
+        self.episodeNum = row[0][0]
+        self.title = row[0][1]
+        self.subtitle = row[0][2]
+        self.author = row[0][3]
+        self.pubDate = row[0][4]
+        self.story = row[0][5]
+        bofhDB.close
+#endregion
+
+#region set
     def setEpisodeNum(self, episodeNum):
         self.episodeNum = episodeNum
 
@@ -28,17 +42,9 @@ class episode:
     def setStory(self, story):
         self.story = story
 
-    def DBInit(self):
-        bofhDB = database.database()
-        row = bofhDB.episodeFromDB(self.getURL())
-        self.episodeNum = row[0]
-        self.title = row[1]
-        self.subtitle = row[2]
-        self.author = row[3]
-        self.pubDate = row[4]
-        self.story = row[5]
-        bofhDB.close
+#endregion
 
+#region get
     def getURL(self):
         return self.url
 
@@ -60,10 +66,16 @@ class episode:
     def getPubDate(self):
         return self.pubDate
 
+    def getStory(self):
+        return self.story
+
+#endregion
+
+#region methods
     def formatPubDate(self, format):
         dbFormat = ("%Y-%m-%d %H:%M:%S")
         strDate = datetime.strptime(self.pubDate, dbFormat)
-        forYear = ("%Y")
+        forYear = ("%Y") #2024
         forShort = ("%Y-%m-%d") #2024-11-22
         forLong = ("%A, %B %d, %Y at %H:%M %Z") #Friday, November 22 2024 at 09:25 UTC
         if format == 'year':
@@ -72,9 +84,6 @@ class episode:
             return strDate.strftime(forShort)
         elif format == 'long':
             return strDate.strftime(forLong) + 'UTC'
-
-    def getStory(self):
-        return self.story
 
     def printShort(self):
         print(self.episodeNum)
@@ -86,3 +95,4 @@ class episode:
 
     def printStory(self):
         print("Story = " + self.story)
+#endregion
