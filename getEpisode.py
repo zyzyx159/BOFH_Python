@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright, playwright
 import database
 import episode
+import export
 
 #get all the links of episodes I have not downloaded yet
 bofhDB = database.database()
@@ -39,6 +40,8 @@ def run(playwright: playwright, URL):
     epiStory = epiStory.replace(episodeNum[0].inner_text(), "")
     epi.setStory(epiStory)
 
+    browser.close()
+
     return epi
 
 #make a PlayWright instance for each
@@ -46,3 +49,5 @@ with sync_playwright() as playwright:
     for link in bofhDB.download():
         play = run(playwright, link[0])
         bofhDB.update(play)
+        exp = export.export(play)
+        exp.writeFile()
