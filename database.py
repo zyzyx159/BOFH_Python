@@ -24,7 +24,7 @@ class database:
             VALUES (?, "False");'''
         self.downloadQuery = '''SELECT link 
             FROM bofh 
-            WHERE downloaded = 'False' limit 1;'''
+            WHERE downloaded = 'False';'''
             #for testing this is limited to just the top one.
         self.updateQuery = '''UPDATE bofh
             SET downloaded = ?,
