@@ -25,7 +25,6 @@ class database:
         self.downloadQuery = '''SELECT link 
             FROM bofh 
             WHERE downloaded = 'False';'''
-            #for testing this is limited to just the top one.
         self.updateQuery = '''UPDATE bofh
             SET downloaded = ?,
             episodeNum = ?,
@@ -45,7 +44,6 @@ class database:
             WHERE link = ?;'''
         self.getLinksQuery = '''SELECT link
             FROM bofh;'''
-
         self.deleteQuery = '''Delete from bofh
             WHERE link = ?;'''
 
