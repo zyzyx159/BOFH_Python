@@ -17,7 +17,7 @@ def run(playwright: playwright, startURL):
 
 def deleteJunkLinks():
     #there is no good way for the computer to spot these, easier to do manually
-    junkLinks = [''] * 16
+    junkLinks = [''] * 17
     junkLinks[0] = 'https://www.theregister.com/2002/05/11/2001_a_bofh_odyssey/'
     junkLinks[1] = 'https://www.theregister.com/2003/01/27/bofh_2002_a_readers_digest/'
     junkLinks[2] = 'https://www.theregister.com/2004/02/11/bofh_2003_year_book/'
@@ -34,8 +34,9 @@ def deleteJunkLinks():
     junkLinks[13] = 'https://www.theregister.com/2001/11/15/salmon_days_trailer_trash/'
     junkLinks[14] = 'https://www.theregister.com/2002/02/18/salmon_days_goes_live/'
     junkLinks[15] = 'https://www.theregister.com/2001/10/11/who_is_the_bastard/'
+    junkLinks[16] = 'https://www.theregister.com/2004/03/11/bofh_protecting_our_backs/'
     
-    for i in range(0,16):
+    for i in range(0,17):
         bofhDB.delete(junkLinks[i])
 
 with sync_playwright() as playwright:
