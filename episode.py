@@ -1,6 +1,7 @@
 from datetime import datetime
 import pytz
 import database
+import string
 
 class episode:
 #region init
@@ -41,7 +42,6 @@ class episode:
         
     def setStory(self, story):
         self.story = story
-
 #endregion
 
 #region get
@@ -68,7 +68,6 @@ class episode:
 
     def getStory(self):
         return self.story
-
 #endregion
 
 #region methods
@@ -95,4 +94,32 @@ class episode:
 
     def printStory(self):
         print("Story = " + self.story)
+
+    def getFileName(self):
+        formatEpiNum = str(self.getEpisodeNum()).translate(str.maketrans('','',string.punctuation))
+        formatEpiNum = formatEpiNum.replace(" ", "_")
+        formatEpiTitle = str(self.getTitle()).translate(str.maketrans('','',string.punctuation))
+        formatEpiTitle = formatEpiTitle.replace(" ", "_")
+        fileName = formatEpiNum + "-" + formatEpiTitle + ".xhtml"
+        return fileName
+
+    def getChapterTitle(self):
+        chapterTitle = self.getEpisodeNum() + " - " + self.getTitle()
+        return chapterTitle
+
+    def getEpiString(self):
+        epiString = '''<html>
+            <head>
+            <title> ''' + self.getEpisodeNum() + ''' - ''' + self.getTitle() + '''</title>
+            </head>
+            <body>
+            <h1>''' + self.getTitle() + ''' </h1> 
+            <h2>''' + self.getSubtitle() + ''' </h2>
+            <h3>''' + self.getEpisodeNum() + ''' </h3>
+            ''' + self.getStory() + '''
+            Written by: ''' + self.getAuthor() + '''
+            <br> Posted to: <a href="''' + self.getURL() + '''"> ''' + self.getURL() + '''</a> </br>
+            Posted on: ''' + self.formatPubDate('long') + '''
+            </body> </html>'''
+        return epiString
 #endregion
