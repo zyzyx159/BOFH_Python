@@ -15,7 +15,8 @@ class database:
             subtitle TEXT,
             author TEXT,
             pubDate TEXT,
-            story TEXT);'''
+            story TEXT,
+            pubYear TEXT);'''
         self.countQuery = '''SELECT count(*) 
             FROM bofh 
             WHERE link = ?'''
@@ -24,7 +25,7 @@ class database:
             VALUES (?, "False");'''
         self.downloadQuery = '''SELECT link 
             FROM bofh 
-            WHERE downloaded = 'False';'''
+            WHERE downloaded = "False";'''
             #for testing this is limited to just the top one.
         self.updateQuery = '''UPDATE bofh
             SET downloaded = ?,
