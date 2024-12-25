@@ -46,6 +46,9 @@ class database:
         self.getLinksQuery = '''SELECT link
             FROM bofh;'''
 
+        self.deleteQuery = '''Delete from bofh
+            WHERE link = ?;'''
+
         self.cursor.execute(self.createQuery)
 
     def count(self, URL):
@@ -78,6 +81,10 @@ class database:
         self.cursor.execute(self.getLinksQuery)
         links = self.cursor.fetchall()
         return links
+
+    def delete(self, URL):
+        self.cursor.execute(self.deleteQuery, (URL,))
+        self.sqliteConnection.commit()
 
     def close(self):
         self.sqliteConnection.close()
