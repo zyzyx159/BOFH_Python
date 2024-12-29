@@ -17,8 +17,7 @@ class episode:
         self.subtitle = row[0][2]
         self.author = row[0][3]
         self.pubDate = row[0][4]
-        self.pubYear = row[0][5]
-        self.story = row[0][6]
+        self.story = row[0][5]
         bofhDB.close
 #endregion
 
