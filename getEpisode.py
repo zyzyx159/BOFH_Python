@@ -31,6 +31,8 @@ def run(playwright: playwright, URL):
 
     pageBody = page.query_selector("#body")
     episodeNum = pageBody.query_selector_all('span.label');
+    singleDigit = re.findall(r'(?<!\S)\d(?!\S)', episodeNum)
+    episodeNum = episodeNum.replace(singleDigit, singleDigit.zfill(2))
     epi.setEpisodeNum(episodeNum[0].inner_text())
 
     story = pageBody.query_selector_all("p")

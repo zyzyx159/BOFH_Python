@@ -17,7 +17,8 @@ class episode:
         self.subtitle = row[0][2]
         self.author = row[0][3]
         self.pubDate = row[0][4]
-        self.story = row[0][5]
+        self.pubYear = row[0][5]
+        self.story = row[0][6]
         bofhDB.close
 #endregion
 
@@ -39,7 +40,10 @@ class episode:
         dt = datetime.strptime(pubDate, importFormat)
         self.pubDate = dt
         #self.pubDate = dt.astimezone(pytz.timezone('UTC'))
-        
+    
+    def setPubYear(self):
+        self.pubYear = self.PubDate[:4]
+
     def setStory(self, story):
         self.story = story
 #endregion
@@ -66,6 +70,9 @@ class episode:
     def getPubDate(self):
         return self.pubDate
 
+    def getPubYear(self):
+        return self.pubYear
+
     def getStory(self):
         return self.story
 #endregion
@@ -91,6 +98,7 @@ class episode:
         print("Author = " + self.author)
         print("Published on (short) = "+ self.formatPubDate('short'))
         print("Published on (long) = " + self.formatPubDate('long'))
+        print("Published year = " + self.pubYear)
 
     def printStory(self):
         print("Story = " + self.story)
