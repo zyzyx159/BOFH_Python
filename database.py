@@ -15,6 +15,7 @@ class database:
             subtitle TEXT,
             author TEXT,
             pubDate TEXT,
+            pubYear TEXT,
             story TEXT);'''
         self.countQuery = '''SELECT count(*) 
             FROM bofh 
@@ -32,6 +33,7 @@ class database:
             subtitle = ?,
             author = ?,
             pubDate = ?,
+            pubYear = ?,
             story = ?
             WHERE link = ?;'''
         self.episodeFromDBQuery = '''SELECT episodeNum,
@@ -66,7 +68,7 @@ class database:
     def update(self, episode):
         self.cursor.execute(self.updateQuery, (episode.getDownloaded(), 
             episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(), 
-            episode.getAuthor(), episode.getPubDate(), 
+            episode.getAuthor(), episode.getPubDate(), episode.getPubYear(),
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
 
