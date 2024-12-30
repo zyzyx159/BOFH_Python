@@ -33,12 +33,16 @@ def removeEmptyP():
         fixedStory = story.replace("<p> </p>", "")
         cursor.execute(update, (fixedStory, link))
 
+#Fix episode numbers
+def twoDigitEpisode():
+    print('not yet')
+
 #pubYear()
 removeEmptyP()
+#twoDigitEpisode()
 
 sqliteConnection.commit()
 sqliteConnection.close()
-#remove "BOFH episode #"
 
 #maybe remove <br> in story
 #stop them from being added
