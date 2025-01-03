@@ -33,8 +33,23 @@ def removeEmptyP():
         fixedStory = story.replace("<p> </p>", "")
         cursor.execute(update, (fixedStory, link))
 
+def twoDigitEpisode():
+    select = '''select link, episodeNum from bofh;'''
+    update = '''update bofh set episodeNum = ? where link = ?;'''
+    cursor.execute(select)
+    linkList = cursor.fetchall()
+
+    count = len(linkList)
+    for i in range(count):
+        link = linkList[i][0]
+        num = linkList[i][1]
+        num = num.replace("EPISODE ", "")
+        num = "EPISODE " + str(num).zfill(2)
+        cursor.execute(update, (num, link))
+
 #pubYear()
-removeEmptyP()
+#removeEmptyP()
+twoDigitEpisode()
 
 sqliteConnection.commit()
 sqliteConnection.close()
