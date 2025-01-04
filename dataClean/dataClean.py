@@ -53,7 +53,6 @@ twoDigitEpisode()
 
 sqliteConnection.commit()
 sqliteConnection.close()
-#remove "BOFH episode #"
 
 #maybe remove <br> in story
 #stop them from being added
