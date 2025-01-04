@@ -3,49 +3,57 @@ import os
 import database
 from ebooklib import epub
 import ebooklib
+import TOCbuilder
 
 class export:
     def __init__(self):
-        #self.epi = epi
         self.DB = database.database()
+        self.spineCount = 2
+
+        self.book = epub.EpubBook()
+        self.book.set_identifier('BOFH Omnibus')
+        self.book.set_title('The BOFH Omnibus')
+        self.book.set_language('en')
+        self.book.add_author('Simon Travaglia')
+        self.book.set_cover("image/bofh_phone_cover.png", open('image/bofh_phone_cover.png', 'rb').read())
+        
+        cover = epub.EpubHtml(title='Cover', file_name='intro.xhtml',lang='en')
+        cover.content='''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+            <html xmlns="http://www.w3.org/1999/xhtml"><head>
+            <title>The Complete BOFH Omnibus</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            </head><body><img src="image/bofh_phone_cover.png" alt="horned phone" />
+            </body></html>'''
+        self.book.add_item(cover)
+        self.book.spine.insert(0,cover)
     
-    def getPath(self):
-        path = os.path.join(os.path.dirname(__file__), "output", self.epi.formatPubDate('year'))
-        if not os.path.exists(path):
-            os.makedirs(path)
-        return path
+    def incrementSpineCount(self):
+        self.spineCount = self.spineCount + 1
 
-    def writeHTML(self):
-        with open(os.path.join(self.getPath(), self.getFileName()), "w") as f:
-            f.write(self.getEpiString())
-
+    def getSpineCount(self):
+        return self.spineCount
+    
     def buildBook(self):
-        book = epub.EpubBook()
+        # get sorted list of years
+        years = self.DB.getPubYears()
+        toc = TOCbuilder.TOC()
+        for year in years:
+            toc.startSection(year[0])
+            links = self.DB.getLinksByYear(year[0]) #links by year ordered by episodeNum ASC
+            for link in links: 
+                epi = episode.episode(link[0]) # build episode per link
+                epi.DBInit()
+                toc.addChapter(epi.getFileName(), epi.getChapterTitle())
+                chap = epub.EpubHtml(title=epi.getTitle(),
+                    file_name=epi.getFileName(), lang='en')
+                chap.content=epi.getEpiString()
+                self.book.add_item(chap)
+                self.book.spine.insert(self.getSpineCount(), chap)
+                self.incrementSpineCount()
+            toc.endSection()
+        self.book.add_item(toc.getTOC())
+        self.book.spine.insert(1,toc.getTOC())
+        self.book.add_item(epub.EpubNcx())
+        self.book.add_item(epub.EpubNav())
 
-        #base set up
-        book.set_identifier('BOFH Omnibus')
-        book.set_title('The BOFH Omnibus')
-        book.set_language('en')
-        book.add_author('Simon Travaglia')
-
-        chapters = self.DB.getLinks()
-        book.spine.insert(1, 'nav')
-        i=2 #counter to add chapters with
-        toc = [] #list of chapters for Table of Contents
-        for chapter in chapters:
-            epi = episode.episode(chapter[0])
-            epi.DBInit()
-            chap = epub.EpubHtml(title=epi.getTitle(), 
-                file_name=epi.getFileName(),
-                lang='en')
-            chap.content=epi.getEpiString()
-            book.add_item(chap)
-            book.spine.insert(i, chap)
-            toc.append(epub.Link(chap.file_name, chap.title, 'chapter'))
-            i=i+1
-        book.toc = (epub.Link('nav.xhtml', 'Table of Contents', 'toc'),
-            (epub.Section('Chapters'),toc),)
-        book.add_item(epub.EpubNcx())
-        book.add_item(epub.EpubNav())
-
-        epub.write_epub('bofh.epub', book)
+        epub.write_epub('bofh.epub', self.book)
