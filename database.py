@@ -48,6 +48,12 @@ class database:
             FROM bofh;'''
         self.deleteQuery = '''Delete from bofh
             WHERE link = ?;'''
+        self.PubYears = '''SELECT DISTINCT PubYear 
+            FROM bofh order by PubYear ASC;'''
+        self.linksByYear = '''SELECT link
+            FROM bofh 
+            WHERE PubYear = ? 
+            ORDER BY episodeNum asc;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -85,6 +91,16 @@ class database:
     def delete(self, URL):
         self.cursor.execute(self.deleteQuery, (URL,))
         self.sqliteConnection.commit()
+
+    def getPubYears(self):
+        self.cursor.execute(self.PubYears)
+        years = self.cursor.fetchall()
+        return years
+
+    def getLinksByYear(self, year):
+        self.cursor.execute(self.linksByYear, (year,))
+        links = self.cursor.fetchall()
+        return links
 
     def close(self):
         self.sqliteConnection.close()
