@@ -5,6 +5,7 @@
     "ebooklib",
     "gmtime",
     "outofprocess",
+    "pubyear",
     "pycache",
     "pytz",
     "theregister",
