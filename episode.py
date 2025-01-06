@@ -41,7 +41,7 @@ class episode:
         #self.pubDate = dt.astimezone(pytz.timezone('UTC'))
     
     def setPubYear(self):
-        self.pubYear = self.PubDate[:4]
+        self.pubYear = self.pubDate.year
 
     def setStory(self, story):
         self.story = story
