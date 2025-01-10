@@ -12,7 +12,7 @@ def run(playwright: playwright, startURL):
 
     for link in page.locator('#body').locator('p').locator('a').all():
         url = link.get_attribute("href")
-        print(url)
+        #print(url)
         if bofhDB.count(url) == 0:
             bofhDB.insert(url,)
 
