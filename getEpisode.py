@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright, playwright
 import database
 import episode
 import export
-import re 
+import re
 
 #get all the links of episodes I have not downloaded yet
 bofhDB = database.database()
