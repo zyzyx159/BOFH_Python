@@ -4,9 +4,10 @@ import getEpisode
 import getExport
 
 #run get links
-getLinks()
+# getLinks() #I have this commented out, and yet it still runs
 #test if there are new links
-if database.database.newLinks() > 0:
+db = database.database()
+if db.newLinks() > 0:
     getEpisode()
     getExport()
 #need to build a distribution system
