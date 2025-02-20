@@ -1,4 +1,4 @@
-__pycache__/*
+__pycache__/
 bofh/
 bofh/lib/python3.12/site-packages/greenlet/__pycache__/__init__.cpython-312.pyc
 bofh/lib/python3.12/site-packages/playwright/__pycache__/__init__.cpython-312.pyc
