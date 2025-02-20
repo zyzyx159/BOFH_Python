@@ -12,7 +12,7 @@ def run(playwright: playwright, startURL):
 
     for link in page.locator("a[class=story_link]").all():
         url = link.get_attribute("href")
-        if "bofh" in url: # this line does not work for the very early episodes, but is not needed for the archive
+        if "bofh" in url: 
             if bofhDB.count(urlBase + url) == 0:
                 bofhDB.insert(urlBase + url,)
 

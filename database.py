@@ -15,6 +15,7 @@ class database:
             subtitle TEXT,
             author TEXT,
             pubDate TEXT,
+            pubYear TEXT,
             story TEXT);'''
         self.countQuery = '''SELECT count(*) 
             FROM bofh 
@@ -25,7 +26,6 @@ class database:
         self.downloadQuery = '''SELECT link 
             FROM bofh 
             WHERE downloaded = 'False';'''
-            #for testing this is limited to just the top one.
         self.updateQuery = '''UPDATE bofh
             SET downloaded = ?,
             episodeNum = ?,
@@ -33,6 +33,7 @@ class database:
             subtitle = ?,
             author = ?,
             pubDate = ?,
+            pubYear = ?,
             story = ?
             WHERE link = ?;'''
         self.episodeFromDBQuery = '''SELECT episodeNum,
@@ -45,9 +46,17 @@ class database:
             WHERE link = ?;'''
         self.getLinksQuery = '''SELECT link
             FROM bofh;'''
-
         self.deleteQuery = '''Delete from bofh
             WHERE link = ?;'''
+        self.PubYears = '''SELECT DISTINCT PubYear 
+            FROM bofh order by PubYear ASC;'''
+        self.linksByYear = '''SELECT link
+            FROM bofh 
+            WHERE PubYear = ? 
+            ORDER BY episodeNum asc;'''
+        self.newLinksQuery = '''SELECT count(*)
+            FROM bofh
+            WHERE title IS NULL;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -68,7 +77,7 @@ class database:
     def update(self, episode):
         self.cursor.execute(self.updateQuery, (episode.getDownloaded(), 
             episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(), 
-            episode.getAuthor(), episode.getPubDate(), 
+            episode.getAuthor(), episode.getPubDate(), episode.getPubYear(),
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
 
@@ -86,5 +95,20 @@ class database:
         self.cursor.execute(self.deleteQuery, (URL,))
         self.sqliteConnection.commit()
 
+    def getPubYears(self):
+        self.cursor.execute(self.PubYears)
+        years = self.cursor.fetchall()
+        return years
+
+    def getLinksByYear(self, year):
+        self.cursor.execute(self.linksByYear, (year,))
+        links = self.cursor.fetchall()
+        return links
+
     def close(self):
         self.sqliteConnection.close()
+    
+    def newLinks(self):
+        self.cursor.execute(self.newLinksQuery)
+        count = self.cursor.fetchall()
+        return count[0][0]
