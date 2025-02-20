@@ -2,6 +2,7 @@ from playwright.sync_api import sync_playwright, playwright
 import database
 import episode
 import export
+import re
 
 #get all the links of episodes I have not downloaded yet
 bofhDB = database.database()
@@ -31,8 +32,9 @@ def run(playwright: playwright, URL):
 
     pageBody = page.query_selector("#body")
     episodeNum = pageBody.query_selector_all('span.label');
-    singleDigit = re.findall(r'(?<!\S)\d(?!\S)', episodeNum)
-    episodeNum = episodeNum.replace(singleDigit, singleDigit.zfill(2))
+    # singleDigit = []
+    singleDigit = re.findall(r'\d+', episodeNum)
+    episodeNum = episodeNum.replace(singleDigit[0], singleDigit.zfill(2))
     epi.setEpisodeNum(episodeNum[0].inner_text())
 
     story = pageBody.query_selector_all("p")
