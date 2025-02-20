@@ -111,4 +111,4 @@ class database:
     def newLinks(self):
         self.cursor.execute(self.newLinksQuery)
         count = self.cursor.fetchall()
-        return count[0]
+        return count[0][0]
