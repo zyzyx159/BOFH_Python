@@ -54,6 +54,9 @@ class database:
             FROM bofh 
             WHERE PubYear = ? 
             ORDER BY episodeNum asc;'''
+        self.newLinksQuery = '''SELECT count(*)
+            FROM bofh
+            WHERE title IS NULL;'''
 
         self.cursor.execute(self.createQuery)
 
@@ -104,3 +107,8 @@ class database:
 
     def close(self):
         self.sqliteConnection.close()
+    
+    def newLinks(self):
+        self.cursor.execute(self.newLinksQuery)
+        count = self.cursor.fetchall()
+        return count[0]

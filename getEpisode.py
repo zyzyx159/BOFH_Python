@@ -31,17 +31,17 @@ def run(playwright: playwright, URL):
     epi.setPubDate(published[0].inner_text())
 
     pageBody = page.query_selector("#body")
-    episodeNum = pageBody.query_selector_all('span.label');
-    # singleDigit = []
-    singleDigit = re.findall(r'\d+', episodeNum)
-    episodeNum = episodeNum.replace(singleDigit[0], singleDigit.zfill(2))
-    epi.setEpisodeNum(episodeNum[0].inner_text())
+    episodeNumList = pageBody.query_selector_all('span.label')
+    episodeNum = episodeNumList[0].inner_text()
+    singleDigit = re.findall(r'\d+', episodeNum)[0]
+    episodeNum = episodeNum.replace(singleDigit, singleDigit.zfill(2))
+    epi.setEpisodeNum(episodeNum)
 
     story = pageBody.query_selector_all("p")
     epiStory = "<br />"
     for p in story:
         epiStory = epiStory + "<p>" + p.inner_text() + "</p>"
-    epiStory = epiStory.replace(episodeNum[0].inner_text(), "")
+    epiStory = epiStory.replace(episodeNum, "")
     epi.setStory(epiStory)
 
     browser.close()
@@ -52,4 +52,5 @@ def run(playwright: playwright, URL):
 with sync_playwright() as playwright:
     for link in bofhDB.download():
         play = run(playwright, link[0])
+        play.setPubYear()
         bofhDB.update(play)
