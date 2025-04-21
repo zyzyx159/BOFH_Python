@@ -3,12 +3,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y xvfb
-RUN apt-get install -qqy x11-apps
-# Additional dependencies for Chromium
-RUN apt-get install -y libnss3 libxss1 libasound2 fonts-noto-color-emoji
+RUN apt-get install -y xvfb x11-apps libnss3 libxss1 libasound2 fonts-noto-color-emoji cron
 ENTRYPOINT ["/bin/sh", "-c", "/usr/bin/xvfb-run -a $@", ""]
 RUN playwright install-deps chromium
 RUN playwright install chromium
-COPY . .
+COPY crontab /etc/cron.d/my-cron
+RUN chmod 0644 /etc/cron.d/my-cron
+COPY . /app
 CMD ["python", "./main.py"]
