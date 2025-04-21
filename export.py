@@ -56,4 +56,4 @@ class export:
         self.book.add_item(epub.EpubNcx())
         self.book.add_item(epub.EpubNav())
 
-        epub.write_epub('bofh.epub', self.book)
+        epub.write_epub('/app/output/bofh.epub', self.book)
