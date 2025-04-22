@@ -3,3 +3,8 @@
 .vscode
 archive
 dataClean
+Dockerfile
+docker-compose.yml
+README.md
+Todo.txt
+uv.lock
