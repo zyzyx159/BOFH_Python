@@ -1,0 +1,5 @@
+services:
+  bofh_archive:
+    image: bofh_archive:latest
+    volumes:
+      - ./output:/app/output
