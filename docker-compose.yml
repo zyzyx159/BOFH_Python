@@ -1,8 +1,0 @@
-services:
-  bofh_archive:
-    image: bofh_archive:latest
-    tty: true
-    environment:
-      - DISPLAY=:99
-    volumes:
-      - ./output:/app/output

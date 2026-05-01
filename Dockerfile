@@ -1,30 +1,25 @@
-FROM python:3.12
+# 1. Use the version required by your previous error
+FROM mcr.microsoft.com/playwright/python:v1.51.0-noble
 
+# 2. Install Xvfb (Virtual Framebuffer)
+RUN apt-get update && apt-get install -y \
+    xvfb \
+    x11-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# 3. Set work directory
 WORKDIR /app
 
-# Install system dependencies
+# 4. Copy requirements and install
+# Ensure playwright==1.51.0 is in your requirements.txt
 COPY requirements.txt .
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y xvfb x11-apps libnss3 libxss1 libasound2 fonts-noto-color-emoji cron nano
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+# 5. Copy the rest of your project (main.py, getLinks.py, .dockerignore, etc.)
+COPY . .
 
-# Install Playwright dependencies
-RUN playwright install-deps chromium
-RUN playwright install chromium
+RUN mkdir -p /app/output
 
-# Copy cron file and set up logging
-# COPY crontab /etc/cron.d/my-cron
-# RUN chmod 0644 /etc/cron.d/my-cron
-# RUN touch /var/log/cron.log
+RUN chmod +x entrypoint.sh
 
-# Copy application code
-COPY . /app
-
-# Set environment variable for display (helpful for debugging, but xvfb-run sets it automatically)
-ENV DISPLAY=:99
-
-# Use xvfb-run to wrap the command passed to the container
-ENTRYPOINT ["/usr/bin/xvfb-run", "-a", "--server-args=-screen 0 1024x768x16"]
-CMD ["python", "main.py"]  # Replace with your actual command   
+ENTRYPOINT ["./entrypoint.sh"]
