@@ -1,10 +1,23 @@
-import getLinks
 import database
+import getLinks
 import getEpisode
-import getExport
+from export import export
+from playwright.sync_api import sync_playwright
 
-db = database.database()
-if db.newLinks() > 0:
-    getEpisode()
-    getExport()
-#need to build a distribution system
+def main():
+    # 1. Scraping Phase
+    with sync_playwright() as p:
+        getLinks.run(p, startURL="https://www.theregister.com/offbeat/bofh/")
+
+    # 2. Database Check
+    db = database.database()
+    if db.newLinks() > 0:
+        getEpisode.run()
+
+    # 3. Export Phase
+    book = export()
+    book.buildBook()
+
+if __name__ == "__main__":
+    main()
+

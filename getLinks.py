@@ -16,6 +16,11 @@ def run(playwright: playwright, startURL):
             if bofhDB.count(urlBase + url) == 0:
                 bofhDB.insert(urlBase + url,)
 
-with sync_playwright() as playwright:
-    current = run(playwright, startURL="https://www.theregister.com/offbeat/bofh/")
-    bofhDB.close()
+    browser.close()
+
+# Wrap this so it doesn't run on import
+if __name__ == "__main__":
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as playwright:
+        current = run(playwright, startURL="https://www.theregister.com/offbeat/bofh/")
+

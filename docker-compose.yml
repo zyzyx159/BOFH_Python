@@ -1,6 +1,11 @@
 services:
-  bofh_archive:
+  scraper:
     build: .
-    image: bofh_archive:latest
+    image: bofh-scraper
+    ipc: host
     volumes:
-      - ./output:/app/output
+      - .:/app
+    # This replaces the need for 'docker run --rm' manually
+    stdin_open: true
+    tty: true
+
