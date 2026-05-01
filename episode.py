@@ -39,7 +39,7 @@ class episode:
         dt = datetime.strptime(pubDate, importFormat)
         self.pubDate = dt
         #self.pubDate = dt.astimezone(pytz.timezone('UTC'))
-    
+
     def setPubYear(self):
         self.pubYear = self.pubDate.year
 

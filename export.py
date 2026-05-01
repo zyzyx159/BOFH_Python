@@ -9,7 +9,7 @@ class export:
     def __init__(self):
         self.DB = database.database()
         self.spineCount = 2
-
+        self.output_path = '/app/output/bofh.epub'
         self.book = epub.EpubBook()
         self.book.set_identifier('BOFH Omnibus')
         self.book.set_title('The BOFH Omnibus')
@@ -34,7 +34,7 @@ class export:
         return self.spineCount
 
     def buildBook(self):
-        # get sorted list of years
+        # 1. Generate the TOC and Chapters
         years = self.DB.getPubYears()
         toc = TOCbuilder.TOC()
         for year in years:
@@ -51,9 +51,16 @@ class export:
                 self.book.spine.insert(self.getSpineCount(), chap)
                 self.incrementSpineCount()
             toc.endSection()
+
+        # 2. Finalize Book Structure
         self.book.add_item(toc.getTOC())
         self.book.spine.insert(1,toc.getTOC())
         self.book.add_item(epub.EpubNcx())
         self.book.add_item(epub.EpubNav())
 
-        epub.write_epub('/app/output/bofh.epub', self.book)
+        # 3. Delete the file if it already exists
+        if os.path.exists(self.output_path):
+            os.remove(self.output_path)
+
+        # 4. Write the final file
+        epub.write_epub(self.output_path, self.book)

@@ -1,0 +1,11 @@
+services:
+  scraper:
+    build: .
+    image: bofh-scraper
+    ipc: host
+    volumes:
+      - .:/app
+    # This replaces the need for 'docker run --rm' manually
+    stdin_open: true
+    tty: true
+
