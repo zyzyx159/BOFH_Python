@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 def main():
     # 1. Scraping Phase
     with sync_playwright() as p:
-        getLinks.run(p, startURL="https://www.theregister.com/offbeat/bofh/")
+        getLinks.run(p, startURL="https://www.theregister.com/bofh/")
 
     # 2. Database Check
     db = database.database()
