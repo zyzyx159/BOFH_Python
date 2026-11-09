@@ -2,5 +2,15 @@ services:
   bofh_archive:
     image: bofh_archive:latest
     tty: true
+    environment:
+      - DISPLAY=:99
+  scraper:
+    build: .
+    image: bofh-scraper
+    ipc: host
     volumes:
       - ./output:/app/output
+      - .:/app
+    # This replaces the need for 'docker run --rm' manually
+    stdin_open: true
+    tty: true

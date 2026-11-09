@@ -1,1 +1,0 @@
-The command in the crontab is wrong. You need to fix that to run the python app correctly.

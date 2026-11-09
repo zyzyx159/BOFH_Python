@@ -3,13 +3,13 @@ import episode
 
 class database:
     def __init__(self):
-        self.dbName = "bofh.db"
+        self.dbName = "/app/data/bofh.db"
         self.sqliteConnection = sqlite3.connect(self.dbName)
         self.cursor = self.sqliteConnection.cursor()
 
         self.createQuery = '''CREATE table if not exists bofh(
             link TEXT primary key,
-            downloaded TEXT, 
+            downloaded TEXT,
             episodeNum TEXT,
             title TEXT,
             subtitle TEXT,
@@ -17,14 +17,14 @@ class database:
             pubDate TEXT,
             pubYear TEXT,
             story TEXT);'''
-        self.countQuery = '''SELECT count(*) 
-            FROM bofh 
+        self.countQuery = '''SELECT count(*)
+            FROM bofh
             WHERE link = ?'''
         self.insertQuery = '''INSERT into bofh(
-            link, downloaded) 
+            link, downloaded)
             VALUES (?, "False");'''
-        self.downloadQuery = '''SELECT link 
-            FROM bofh 
+        self.downloadQuery = '''SELECT link
+            FROM bofh
             WHERE downloaded = 'False';'''
         self.updateQuery = '''UPDATE bofh
             SET downloaded = ?,
@@ -48,11 +48,11 @@ class database:
             FROM bofh;'''
         self.deleteQuery = '''Delete from bofh
             WHERE link = ?;'''
-        self.PubYears = '''SELECT DISTINCT PubYear 
+        self.PubYears = '''SELECT DISTINCT PubYear
             FROM bofh order by PubYear ASC;'''
         self.linksByYear = '''SELECT link
-            FROM bofh 
-            WHERE PubYear = ? 
+            FROM bofh
+            WHERE PubYear = ?
             ORDER BY episodeNum asc;'''
         self.newLinksQuery = '''SELECT count(*)
             FROM bofh
@@ -75,8 +75,8 @@ class database:
         return downloadList
 
     def update(self, episode):
-        self.cursor.execute(self.updateQuery, (episode.getDownloaded(), 
-            episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(), 
+        self.cursor.execute(self.updateQuery, (episode.getDownloaded(),
+            episode.getEpisodeNum(), episode.getTitle(), episode.getSubtitle(),
             episode.getAuthor(), episode.getPubDate(), episode.getPubYear(),
             episode.getStory(), episode.getURL(),))
         self.sqliteConnection.commit()
@@ -107,7 +107,7 @@ class database:
 
     def close(self):
         self.sqliteConnection.close()
-    
+
     def newLinks(self):
         self.cursor.execute(self.newLinksQuery)
         count = self.cursor.fetchall()
